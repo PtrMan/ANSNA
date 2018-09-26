@@ -10,7 +10,8 @@
 //-----------//
 #include "SDR.h"
 #include "Task.h"
-#include "AttentionValue.h"
+// PtrMan<FILE NOT FOUND>
+//#include "AttentionValue.h"
 
 //Parameters//
 //----------//
@@ -21,14 +22,18 @@
 //Data structure//
 //--------------//
 typedef struct {
-    AttentionValue attention;
+    //AttentionValue attention;
+
     /** name of the concept like in OpenNARS */
     SDR name;
     SDR_HASH_TYPE name_hash;
+
     Task event_beliefs[EVENT_BELIEFS_MAX];
     int event_beliefs_amount;
+
     Task precondition_beliefs[PRECONDITION_BELIEFS_MAX];
     int precondition_beliefs_amount;
+    
     Task postcondition_beliefs[POSTCONDITION_BELIEFS_MAX];
     int postcondition_beliefs_amount;
 } Concept;

@@ -76,7 +76,7 @@ SDR SDR_Xor(SDR *a, SDR *b)
     return c;
 }
 
-void swap(SDR *sdr, int bit_i, int bit_j)
+void SDR_swapBits(SDR *sdr, int bit_i, int bit_j)
 {
     //temp <- a, then a <- b, then b <- temp
     int temp = SDR_ReadBit(sdr, bit_i);

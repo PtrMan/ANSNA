@@ -29,6 +29,11 @@ TruthValue getTruthValue(double frequency, double confidence);
 double and(double a, double b);
 //The output is disjunctively determined by the input
 double or(double a, double b);
+
+
+double w2c(double w);
+double c2w(double c);
+
 //{Precondition or Postcondition belief a., Precondition or Postcondition belief a.} |- 
 // Precondition or Postcondition belief a.
 TruthValue revision(TruthValue v1, TruthValue v2);

@@ -1,5 +1,9 @@
 #include "PriorityQueue.h"
 
+// The priority queue for concepts and tasks
+// Idea from https://stackoverflow.com/a/2935995
+
+
 PriorityQueue_Push_Feedback PriorityQueue_Push(PriorityQueue *queue, Prioritized *item, int itemsize, int maxElements, Prioritized *evicted_item)
 {
     PriorityQueue_Push_Feedback feedback = {0};

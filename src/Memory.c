@@ -1,27 +1,32 @@
-#include "Memory.h"
-#include "Concept.h"
+#include <assert.h>
 
-void memory_RESET()
+#include "Memory.h"
+
+void Memory_reset(Memory *memory)
 {
-    memory.concepts_amount = 0;
+    memory->conceptsFreeArrayLength = CONCEPTS_MAX;
+    
+    for (int i=0; i<CONCEPTS_MAX; i++)
+    {
+        memory->conceptsFreeArray[i] = &(memory->preallocatedConcepts[i]);
+    }
 }
 
-SDR_HASH_TYPE bitToConcept[SDR_SIZE][CONCEPTS_MAX];
-int bitToConceptAmount[SDR_SIZE];
-void Memory_addConcept(Concept *concept)
+void Memory_addConcept(Memory *memory, Concept *concept)
 {
     //try to add it, and if successful add to voting structure
-    Concept evicted;
-    PriorityQueue_Push_Feedback feedback = PriorityQueue_Push(&memory, &concept, sizeof(Concept), CONCEPTS_MAX, &evicted);
-    if(feedback.added)
+    //Concept evicted;
+    //PriorityQueue_Push_Feedback feedback = PriorityQueue_Push(&memory, &concept, sizeof(Concept), CONCEPTS_MAX, &evicted);
+    
+    /*if(feedback.added)
     {
         for(int j=0; j<SDR_SIZE; j++)
         {
             if(SDR_ReadBit(&(concept->name), j))
             {
-                int i = bitToConceptAmount[j]; //insert on top
-                bitToConcept[j][i] = concept->name_hash;
-                bitToConceptAmount[j]++;
+                int i = memory->bitToConceptAmount[j]; //insert on top
+                memory->bitToConcept[j][i] = concept->name_hash;
+                memory->bitToConceptAmount[j]++;
              }
          }    
     }
@@ -32,24 +37,24 @@ void Memory_addConcept(Concept *concept)
         {
             if(SDR_ReadBit(&(concept->name), j))
             {
-                for(int i=0; i<bitToConceptAmount[j]; i++)
+                for(int i=0; i<memory->bitToConceptAmount[j]; i++)
                 {
-                    if(bitToConcept[j][i] == evicted.name_hash)
+                    if(memory->bitToConcept[j][i] == evicted.name_hash)
                     {
-                        bitToConcept[j][i] = 0;
+                        memory->bitToConcept[j][i] = 0;
                         //Now move the above ones down to remove the gap
-                        for(int k=i; k<bitToConceptAmount[j]-1; k++)
+                        for(int k=i; k<memory->bitToConceptAmount[j]-1; k++)
                         {
-                            bitToConcept[j][k] = bitToConcept[j][k+1];
+                            memory->bitToConcept[j][k] = memory->bitToConcept[j][k+1];
                         }
                         //and decrement the counter
-                        bitToConceptAmount[j]--;
+                        memory->bitToConceptAmount[j]--;
                         break; //already deleted  
                     }
                 }
              }
          }
-    }
+    }*/
 }
 
 typedef struct
@@ -57,23 +62,25 @@ typedef struct
     SDR_HASH_TYPE concept;
     int count;
 } Vote;
-Concept* Memory_getClosestConceptByName(SDR *taskSDR)
+
+Concept* Memory_getClosestConceptByName(Memory *memory, SDR *taskSDR)
 {
     SDR_HASH_TYPE taskhash = SDR_Hash(taskSDR);
     Vote voting[CONCEPTS_MAX];
     int votes = 0;
     Vote best = {0};
+
     for(int j=0; j<SDR_SIZE; j++)
     {
         if(SDR_ReadBit(taskSDR, j))
         {
-            for(int i=0; i<bitToConceptAmount[j]; i++)
+            for(int i=0; i<memory->bitToConceptAmount[j]; i++)
             {
                 int use_index = votes;
                 bool existed = false;
                 //check first if the SDR already got a vote
                 //and if yes, increment that one instead creating a new one
-                SDR_HASH_TYPE voted_concept = bitToConcept[j][i];
+                SDR_HASH_TYPE voted_concept = memory->bitToConcept[j][i];
                 for(int h=0; h<votes; h++)
                 {
                     if(voting[h].concept == voted_concept)
@@ -101,13 +108,23 @@ Concept* Memory_getClosestConceptByName(SDR *taskSDR)
         return 0;
     }
     //And now retrieve a concept with the same hash:
-    for(int i=0; i<memory.concepts_amount; i++)
+    for(int i=0; i<memory->concepts_amount; i++)
     {
-            if(memory.concepts[i].name_hash == best.concept)
+            if(memory->concepts[i]->name_hash == best.concept)
             {
                 //TODO make sure that each block is equal
-                return &(memory.concepts[i]);
+                return memory->concepts[i];
             }
     }
     return NULL; //closestConceptByName;
+}
+
+Concept* Memory_allocateConcept(Memory *memory) {
+    assert(memory->conceptsFreeArrayLength > 0);
+
+    // take from freelist
+    Concept *result = memory->conceptsFreeArray[memory->conceptsFreeArrayLength-1];
+    memory->conceptsFreeArrayLength--;
+
+    return result;
 }

@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 //Parameters//
 //----------//
@@ -97,5 +98,7 @@ double SDR_Similarity(SDR *a, SDR *b);
 double SDR_EqualTerm(SDR *a, SDR *b);
 //Hash of SDR
 SDR_HASH_TYPE SDR_Hash(SDR *name);
+
+void SDR_swapBits(SDR *sdr, int bit_i, int bit_j);
 
 #endif
