@@ -26,9 +26,9 @@
 //Get a stack-allocated truth valie
 TruthValue getTruthValue(double frequency, double confidence);
 //The output is conjunctively determined by the inputs
-double and(double a, double b);
+double and_(double a, double b);
 //The output is disjunctively determined by the input
-double or(double a, double b);
+double or_(double a, double b);
 
 
 double w2c(double w);

@@ -1,5 +1,5 @@
-#ifndef H_SCALARENCODER
-#define H_SCALARENCODER
+#ifndef H_ENCODE
+#define H_ENCODE
 
 ////////////////////
 //  Scalar encoder//
@@ -17,8 +17,8 @@
 
 //Data structure//
 //--------------//
-SDR input_terms[TERMS_MAX];
-bool input_terms_used[TERMS_MAX];
+static SDR input_terms[TERMS_MAX];
+static bool input_terms_used[TERMS_MAX];
 
 //Methods//
 //-------//

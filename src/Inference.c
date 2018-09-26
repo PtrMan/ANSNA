@@ -9,12 +9,12 @@ TruthValue getTruthValue(double frequency, double confidence)
     return result;
 }
 
-double and(double a, double b)
+double and_(double a, double b)
 {        
     return a*b;
 }
 
-double or(double a, double b) 
+double or_(double a, double b) 
 {
     return 1 - ((1 - a) * (1 - b));
 }
@@ -47,8 +47,8 @@ TruthValue deduction(TruthValue v1, TruthValue v2)
     double f2 = v2.frequency;
     double c1 = v1.confidence;
     double c2 = v2.confidence;
-    double f = and(f1, f2);
-    double c = and(and(c1, c2), f);
+    double f = and_(f1, f2);
+    double c = and_(and_(c1, c2), f);
     return getTruthValue(f,c);
 }
 
@@ -63,7 +63,7 @@ TruthValue abduction(TruthValue v1, TruthValue v2)
     double f2 = v2.frequency;
     double c1 = v1.confidence;
     double c2 = v2.confidence;
-    double w = and(f2, and(c1, c2));
+    double w = and_(f2, and_(c1, c2));
     double c = w2c(w);
     return getTruthValue(f1, c);
 }
@@ -74,8 +74,8 @@ TruthValue intersection(TruthValue v1, TruthValue v2)
     double f2 = v2.frequency;
     double c1 = v1.confidence;
     double c2 = v2.confidence;
-    double f = and(f1, f2);
-    double c = and(c1, c2);
+    double f = and_(f1, f2);
+    double c = and_(c1, c2);
     return getTruthValue(f, c);
 }
 

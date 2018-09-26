@@ -2,21 +2,25 @@
 
 #include "Memory.h"
 
-void Memory_reset(Memory *memory)
+void Memory_reset(Memory2 *memory2)
 {
-    memory->conceptsFreeArrayLength = CONCEPTS_MAX;
+    memory2->conceptsFreeArrayLength = CONCEPTS_MAX;
     
     for (int i=0; i<CONCEPTS_MAX; i++)
     {
-        memory->conceptsFreeArray[i] = &(memory->preallocatedConcepts[i]);
+        memory2->conceptsFreeArray[i] = &(memory2->preallocatedConcepts[i]);
     }
 }
 
-void Memory_addConcept(Memory *memory, Concept *concept)
+void Memory_addConcept(Memory2 *memory2, Concept *concept)
 {
     //try to add it, and if successful add to voting structure
-    //Concept evicted;
-    //PriorityQueue_Push_Feedback feedback = PriorityQueue_Push(&memory, &concept, sizeof(Concept), CONCEPTS_MAX, &evicted);
+    PriorityQueue<Concept*, CONCEPTS_MAX>::Item pushedItem;
+    pushedItem.value = concept;
+    // TODO< priority >
+
+    PriorityQueue<Concept*, CONCEPTS_MAX>::Item evicted;
+    PriorityQueue_Push_Feedback feedback = memory.push(pushedItem, &evicted);
     
     /*if(feedback.added)
     {
@@ -24,9 +28,9 @@ void Memory_addConcept(Memory *memory, Concept *concept)
         {
             if(SDR_ReadBit(&(concept->name), j))
             {
-                int i = memory->bitToConceptAmount[j]; //insert on top
-                memory->bitToConcept[j][i] = concept->name_hash;
-                memory->bitToConceptAmount[j]++;
+                int i = memory2->bitToConceptAmount[j]; //insert on top
+                memory2->bitToConcept[j][i] = concept->name_hash;
+                memory2->bitToConceptAmount[j]++;
              }
          }    
     }
@@ -37,18 +41,18 @@ void Memory_addConcept(Memory *memory, Concept *concept)
         {
             if(SDR_ReadBit(&(concept->name), j))
             {
-                for(int i=0; i<memory->bitToConceptAmount[j]; i++)
+                for(int i=0; i<memory2->bitToConceptAmount[j]; i++)
                 {
-                    if(memory->bitToConcept[j][i] == evicted.name_hash)
+                    if(memory2->bitToConcept[j][i] == evicted.name_hash)
                     {
-                        memory->bitToConcept[j][i] = 0;
+                        memory2->bitToConcept[j][i] = 0;
                         //Now move the above ones down to remove the gap
-                        for(int k=i; k<memory->bitToConceptAmount[j]-1; k++)
+                        for(int k=i; k<memory2->bitToConceptAmount[j]-1; k++)
                         {
-                            memory->bitToConcept[j][k] = memory->bitToConcept[j][k+1];
+                            memory2->bitToConcept[j][k] = memory2->bitToConcept[j][k+1];
                         }
                         //and decrement the counter
-                        memory->bitToConceptAmount[j]--;
+                        memory2->bitToConceptAmount[j]--;
                         break; //already deleted  
                     }
                 }
@@ -63,7 +67,7 @@ typedef struct
     int count;
 } Vote;
 
-Concept* Memory_getClosestConceptByName(Memory *memory, SDR *taskSDR)
+Concept* Memory_getClosestConceptByName(Memory2 *memory, SDR *taskSDR)
 {
     SDR_HASH_TYPE taskhash = SDR_Hash(taskSDR);
     Vote voting[CONCEPTS_MAX];
@@ -119,7 +123,7 @@ Concept* Memory_getClosestConceptByName(Memory *memory, SDR *taskSDR)
     return NULL; //closestConceptByName;
 }
 
-Concept* Memory_allocateConcept(Memory *memory) {
+Concept* Memory_allocateConcept(Memory2 *memory) {
     assert(memory->conceptsFreeArrayLength > 0);
 
     // take from freelist

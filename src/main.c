@@ -16,8 +16,8 @@ int main()
 
 
     // memory
-    Memory *memory;
-    memory = malloc(sizeof(Memory));
+    Memory2 *memory;
+    memory = static_cast<Memory2*>(malloc(sizeof(Memory2)));
     if (!memory) {
         printf("Out of memory!\n");
         return 1;

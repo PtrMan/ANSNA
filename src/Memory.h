@@ -13,7 +13,7 @@
 
 //Parameters//
 //----------//
-#define CONCEPTS_MAX 1000 // 10000
+#define CONCEPTS_MAX 100 // 10000
 #define BUFFER_TASKS_MAX 64
 
 //Data structure//
@@ -44,19 +44,23 @@ typedef struct {
 
 	// all preallocated concepts
 	Concept preallocatedConcepts[CONCEPTS_MAX];
-} Memory;
+} Memory2;
+
+// TODO< move into Memory2 >
+static PriorityQueue<Concept*, CONCEPTS_MAX> memory;
+
 
 //Methods//
 //-------//
 //TODO do check which methods shouldn't be just PriorityQueue methods
 //Init memory
-void Memory_reset(Memory *memory);
+void Memory_reset(Memory2 *memory);
 //Add concept to memory
-void Memory_addConcept(Memory *memory, Concept *concept);
+void Memory_addConcept(Memory2 *memory, Concept *concept);
 //Return closest concept
-Concept* Memory_getClosestConceptByName(Memory *memory, SDR *taskSDR);
+Concept* Memory_getClosestConceptByName(Memory2 *memory, SDR *taskSDR);
 
 // allocates a new concept
-Concept* Memory_allocateConcept(Memory *memory);
+Concept* Memory_allocateConcept(Memory2 *memory);
 
 #endif

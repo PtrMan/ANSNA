@@ -3,12 +3,14 @@
 // The priority queue for concepts and tasks
 // Idea from https://stackoverflow.com/a/2935995
 
+/* COMMENTED BECAUSE OF C INSANITY
 
 PriorityQueue_Push_Feedback PriorityQueue_Push(PriorityQueue *queue, Prioritized *item, int itemsize, int maxElements, Prioritized *evicted_item)
 {
     PriorityQueue_Push_Feedback feedback = {0};
     int i = queue->items_amount + 1;
     int j = i / 2;
+
     //"move the item "up" (exchanging child with parent) till element to insert priority is smaller than the node
     while(i > 1 && queue->items[j].priority <= item->priority)
     {
@@ -34,6 +36,7 @@ PriorityQueue_Push_Feedback PriorityQueue_Push(PriorityQueue *queue, Prioritized
         memcpy(&(queue->items[i]), item, itemsize);
     }
     queue->items_amount++;
+
     return feedback;
 }
 
@@ -71,3 +74,4 @@ void PriorityQueue_Pop(PriorityQueue *queue, Prioritized *returnedItem, int item
         current = largest;
     }
 }
+*/
