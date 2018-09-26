@@ -161,7 +161,7 @@ double SDR_Similarity(SDR *a, SDR *b)
 
 SDR_HASH_TYPE SDR_Hash(SDR *name)
 {
-	SDR_HASH_TYPE hash;
+	SDR_HASH_TYPE hash = 0;
 	ITERATE_SDR_BLOCKS(i,
         int pieces = SDR_BLOCK_SIZE / (sizeof(SDR_HASH_TYPE));
         for(int j=0; j<pieces; j++)
@@ -170,6 +170,7 @@ SDR_HASH_TYPE SDR_Hash(SDR *name)
             hash |= (name->blocks[i] >> shift_right);
         }
     )
+
     return hash;
 }
 

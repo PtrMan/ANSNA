@@ -4,6 +4,13 @@
 
 void Memory_reset(Memory2 *memory2)
 {
+    for (int i=0;i<SDR_SIZE;i++) {
+        memory2->bitToConceptAmount[i] = 0;
+    }
+
+
+    // initialize stuff necessary for memory management
+
     memory2->conceptsFreeArrayLength = CONCEPTS_MAX;
     
     for (int i=0; i<CONCEPTS_MAX; i++)
