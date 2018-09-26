@@ -34,9 +34,9 @@ int main()
 
     printf("conceptA.ptr=%d\n", conceptA);
 
-    //Concept *closest = Memory_getClosestConceptByName(memory, &conceptAName);
+    Concept *closest = Memory_getClosestConceptByName(memory, &conceptAName);
 
-    //printf("closest.ptr=%d\n", closest);
+    printf("closest.ptr=%d\n", closest);
     
 
 

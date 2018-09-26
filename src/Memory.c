@@ -4,6 +4,8 @@
 
 void Memory_reset(Memory2 *memory2)
 {
+    memory2->concepts_amount = 0;
+
     for (int i=0;i<SDR_SIZE;i++) {
         memory2->bitToConceptAmount[i] = 0;
     }
@@ -77,7 +79,7 @@ typedef struct
 Concept* Memory_getClosestConceptByName(Memory2 *memory, SDR *taskSDR)
 {
     SDR_HASH_TYPE taskhash = SDR_Hash(taskSDR);
-    Vote voting[CONCEPTS_MAX];
+    Vote voting[CONCEPTS_MAX] = {0};
     int votes = 0;
     Vote best = {0};
 
