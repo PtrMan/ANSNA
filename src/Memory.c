@@ -22,7 +22,7 @@ void Memory_addConcept(Memory2 *memory2, Concept *concept)
     PriorityQueue<Concept*, CONCEPTS_MAX>::Item evicted;
     PriorityQueue_Push_Feedback feedback = memory.push(pushedItem, &evicted);
     
-    /*if(feedback.added)
+    if(feedback.added)
     {
         for(int j=0; j<SDR_SIZE; j++)
         {
@@ -43,7 +43,7 @@ void Memory_addConcept(Memory2 *memory2, Concept *concept)
             {
                 for(int i=0; i<memory2->bitToConceptAmount[j]; i++)
                 {
-                    if(memory2->bitToConcept[j][i] == evicted.name_hash)
+                    if(memory2->bitToConcept[j][i] == evicted.value->name_hash)
                     {
                         memory2->bitToConcept[j][i] = 0;
                         //Now move the above ones down to remove the gap
@@ -58,7 +58,7 @@ void Memory_addConcept(Memory2 *memory2, Concept *concept)
                 }
              }
          }
-    }*/
+    }
 }
 
 typedef struct
